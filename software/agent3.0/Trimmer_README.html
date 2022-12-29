@@ -1,0 +1,187 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README.md</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="trimmer">Trimmer</h1>
+<p>AGeNT Trimmer removes adaptor sequences from Illumina sequencing reads generated using SureSelect and Haloplex library preparation kits. For SureSelect XT HS and XT HS2, Trimmer also processes the Molecular Barcode (MBC) and adds the MBC information to the read name in the output fastq files. Downstream tools, such as AGeNT CReaK make use of these MBC tags in identifying PCR duplicates using molecular barcodes.</p>
+<p><em>Note: This jar was compiled using Java version 11. Please make sure your Java Runtime Environment is at least at version 11 by running the command</em> <code>java -version</code>.</p>
+<p><strong>Command-line syntax:</strong><br>
+To test that you can run Trimmer, run the following command:</p>
+<pre><code>java -jar /path/to/trimmer-&lt;version&gt;.jar
+</code></pre>
+<p>or, if you have setup an environment variable (such as $TRIMMER) as a shortcut:</p>
+<pre><code>java -jar $TRIMMER
+</code></pre>
+<p>You should see the Trimmer help text.</p>
+<p>Example command-line:</p>
+<pre><code>java -jar trimmer-&lt;version&gt;.jar [mandatory options] [options] -fq1 &lt;read1_filename&gt; -fq2 &lt;read2_filename&gt;
+</code></pre>
+<p><strong>Required parameters:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-fq1 &lt;filename&gt;</code></td>
+<td>Read1 FASTQ file (Multiple files can be provided separated by a comma).</td>
+</tr>
+<tr>
+<td><code>-fq2 &lt;filename&gt;</code></td>
+<td>Read2 FASTQ file (Multiple files can be provided separated by a comma).</td>
+</tr>
+</tbody>
+</table><p><em><strong>Note:</strong></em>  <em>Even though -fq1 and -fq2 accept multiple files separated by a comma, the program will output results in a single file for each read.</em></p>
+<p>At least one of the following available library prep types is also mandatory to set the correct adaptor sequences for trimming.</p>
+
+<table>
+<thead>
+<tr>
+<th>Mandatory Option</th>
+<th>Library Prep Type</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-halo</code></td>
+<td>HaloPlex</td>
+</tr>
+<tr>
+<td><code>-hs</code></td>
+<td>HaloPlexHS</td>
+</tr>
+<tr>
+<td><code>-xt</code></td>
+<td>SureSelect XT, XT2, XT HS</td>
+</tr>
+<tr>
+<td><code>-v2</code></td>
+<td>SureSelect XT HS2</td>
+</tr>
+<tr>
+<td><code>-qxt</code></td>
+<td>SureSelect QXT</td>
+</tr>
+</tbody>
+</table><p><strong>Optional Parameters:</strong></p>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-fq3 &lt;filename&gt;</code></td>
+<td>This option is only relevant for SureSelect XT HS. MBCs FASTQ file (Multiple files can be provided separated by a comma).</td>
+</tr>
+<tr>
+<td><code>-bam</code></td>
+<td>Turn on to output unaligned bam file instead of fastq files</td>
+</tr>
+<tr>
+<td><code>-out</code></td>
+<td>Alternative output file name (file path + file name prefix)</td>
+</tr>
+<tr>
+<td><code>-polyG &lt;n&gt;</code></td>
+<td>The minimum length of polyG to trim from 3’ end regardless of base quality (for nextSeq and NovaSeq polyG problem). Value range permitted is &gt;= 1.</td>
+</tr>
+<tr>
+<td><code>-qualityTrimming &lt;n&gt;</code></td>
+<td>Quality threshold for trimming. Value range permitted is 0 to 50. Default value is 5.</td>
+</tr>
+<tr>
+<td><code>-minFractionRead &lt;n&gt;</code></td>
+<td>Sets the minimum read length as a fraction of the original read length after trimming.<br>Value range permitted is 0 to 99. Default value is 30.</td>
+</tr>
+<tr>
+<td><code>-idee_fixe</code></td>
+<td>Indicates that the fastq files are in the older Illumina fastq format (v1.5 or earlier). In addition to handling the older style read names, this option also assumes that the base qualities are encoded using the Illumina v1.5+ Phred+64 format and will attempt to convert bases to Phred+33.</td>
+</tr>
+<tr>
+<td><code>-qual_offset &lt;n&gt;</code></td>
+<td>Overwrite auto-detection to indicate FASTQ quality encoding (1 for Phred+33, 2 for Phred+64, 3 for Solexa+64)</td>
+</tr>
+<tr>
+<td><code>-out_loc</code></td>
+<td>Directory path for output files.</td>
+</tr>
+</tbody>
+</table><p><strong>Usage Examples:</strong><br></p>
+<ul>
+<li>SureSelect XT HS2 example</li>
+</ul>
+<pre><code>java -jar trimmer-&lt;version&gt;.jar \
+     -fq1 ./ICCG-repl1_S1_L001_R1_001.fastq.gz,./ICCG-repl1_S1_L001_R1_002.fastq.gz \
+     -fq2 ./ICCG-repl1_S1_L001_R2_001.fastq.gz,./ICCG-repl1_S1_L001_R2_002.fastq.gz \ 
+     -v2  \
+     -out myOutputDirPath/myOutputFilePrefix
+</code></pre>
+<ul>
+<li>SureSelect XT HS example (with MBC tagging)</li>
+</ul>
+<pre><code>java -jar trimmer-&lt;version&gt;.jar \
+     -fq1 ./ICCG-repl1_S1_L001_R1_001.fastq.gz,./ICCG-repl1_S1_L001_R1_002.fastq.gz \
+     -fq2 ./ICCG-repl1_S1_L001_R2_001.fastq.gz,./ICCG-repl1_S1_L001_R2_002.fastq.gz \
+     -fq3 ./ICCG-repl1_S1_L001_I2_001.fastq.gz,./ICCG-repl1_S1_L001_I2_002.fastq.gz \     
+     -xt  \
+     -out myOutputDirPath/myOutputFilePrefix
+</code></pre>
+<ul>
+<li>SureSelect XT HS example (without MBC tagging)</li>
+</ul>
+<pre><code>java -jar trimmer-&lt;version&gt;.jar \
+     -fq1 ./ICCG-repl1_S1_L001_R1_001.fastq.gz,./ICCG-repl1_S1_L001_R1_002.fastq.gz \
+     -fq2 ./ICCG-repl1_S1_L001_R2_001.fastq.gz,./ICCG-repl1_S1_L001_R2_002.fastq.gz \
+     -xt  \
+     -out myOutputDirPath/myOutputFilePrefix
+</code></pre>
+<ul>
+<li>Halo example</li>
+</ul>
+<pre><code>java -jar trimmer-&lt;version&gt;.jar \
+     -fq1 ./ICCG-repl1_S1_L001_R1_001.fastq.gz,./ICCG-repl1_S1_L001_R1_002.fastq.gz \
+     -fq2 ./ICCG-repl1_S1_L001_R2_001.fastq.gz,./ICCG-repl1_S1_L001_R2_002.fastq.gz \
+     -halo  \
+     -out_loc result/outputFastqs/
+</code></pre>
+<p><strong>Tags for SureSelect XT HS and SureSelect XT HS2:</strong></p>
+<p>For the SureSelect XT HS and XT HS2 options, trimmed molecular barcodes (MBCs) are formatted as valid SAM tags and added to the read name line. These annotation tags are:</p>
+<ul>
+<li>BC:Z:<em>sample barcode</em></li>
+<li>ZA:Z:<em>3 bases of MBC (first half of dual MBC) followed by 1 or 2 dark base(s)</em></li>
+<li>ZB:Z:<em>3 bases of MBC (second half of dual MBC) followed by 1 or 2 dark base(s)</em></li>
+<li>RX:Z:<em>first half of MBC + second half of MBC concatenated with a “-”)</em></li>
+<li>QX:Z:<em>base quality of sequence in RX:Z (concatenated with a space)</em></li>
+</ul>
+<p>e.g.<br>
+<code>@D00266:1113:HTWK5BCX2:1:1102:9976:2206 BC:Z:CTACCGAA+AAGTGTCT ZA:Z:TTAGT ZB:Z:TCCT RX:Z:TTA-TCC QX:Z:DDD DDA</code></p>
+<p><em><strong>Note:</strong></em> <em>The MBC bases are masked as</em> <strong>N</strong> <em>and corresponding base qualities marked as</em> <strong>$</strong> <em>in some annotations if they are not recognized as a valid XT HS2 MBC.</em></p>
+<p>e.g.<br>
+<code>@K00336:80:HW7GLBBXX:7:1115:1184:3688 BC:Z:CTACCGAA+AGACACTT ZA:Z:NNNNN ZB:Z:AAAGT RX:Z:NNN-AAA QX:Z:$$$ &lt;AA</code></p>
+<br>
+<p><strong>Output for SureSelect XT HS2:</strong></p>
+<p>In SureSelect XT HS2 mode (<code>-v2</code>), for every two FASTQ files (read 1 FASTQ file and read 2 FASTQ file) the program outputs three compressed files when not in BAM mode:</p>
+<ul>
+<li>trimmed read 1 FASTQ file (.fastq.gz)</li>
+<li>trimmed read 2 FASTQ file (.fastq.gz)</li>
+<li>MBC sequence file (.txt.gz).</li>
+</ul>
+</div>
+</body>
+
+</html>

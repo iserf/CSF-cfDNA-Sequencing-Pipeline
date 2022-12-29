@@ -1,0 +1,424 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README.md</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__html"><h1 id="creak">CReaK</h1>
+<p>CReaK (<strong>C</strong>onsensus <strong>Rea</strong>d <strong>K</strong>it) identifies PCR duplicates in Illumina sequencing data from SureSelect XT HS or SureSelect XT HS2 Illumina sequencing data. It uses both alignment position and molecular barcode (MBC) information to group reads into MBC families. For each MBC family, CReaK constructs an error-corrected, deduplicated consensus read pair. CReaK requires that the reads in the input BAM file have already been annotated with their corresponding MBC sequences and MBC base qualities (using AGeNT Trimmer and BWA-MEM with “-C” parameter, for example).</p>
+<p><em><strong>Note:</strong></em> <em>This jar was compiled using Java version 11. Please make sure your Java Runtime Environment is at least at version 11 by running the command</em> <code>java -version</code></p>
+<h3 id="command-line-syntax">Command-line syntax</h3>
+<p>To test that you can run CReaK, run the following command:</p>
+<pre><code>java -jar /path/to/creak-&lt;version&gt;.jar -h
+</code></pre>
+<p>or, if you have setup an environment variable (such as "$CREAK) as a shortcut:</p>
+<pre><code>java -jar $CREAK -h
+</code></pre>
+<p>You should see the CReaK help text which includes its usage and options.</p>
+<p>To run CReaK:</p>
+<pre><code>java -Xmx8G -jar creak-&lt;version&gt;.jar -f -F [OPTIONS] input_bam_file_name
+</code></pre>
+<p><em><strong>Note:</strong></em> <em>-Xmx8G is just an example, please adjust memory based on sequencing depth and size of the input file.</em></p>
+<pre><code>Usage: CReaK [-ehrvg] [-b=&lt;bedFile&gt;] -c=&lt;cMode&gt; [-d=&lt;mbcMismatch&gt;] -o=&lt;outBam&gt;
+             [-s=&lt;cacheSize&gt;] (-f [-fi] [-mm=&lt;minAvgMBCQual&gt;]
+             [-mr=&lt;minAvgReadQual&gt;] [-mq=&lt;minMAPQ&gt;]) (-F
+             [-MS=&lt;minMulti4Sinlge&gt;] [-MD=&lt;minMulti4Duplex&gt;]) FILE
+</code></pre>
+<p>Minimal input required:</p>
+<ul>
+<li>Input BAM file</li>
+<li>Output BAM file name/path</li>
+<li>Consensus calling mode (see <em>Consensus Modes</em> table below)</li>
+<li>Filtering options
+<ul>
+<li><code>-f</code>: Enable input read flagging/filtering. This parameter must be present.</li>
+<li><code>-F</code>: Enable consensus read filtering. This parameter must be present.</li>
+</ul>
+</li>
+</ul>
+<h3 id="required-parameters">Required parameters:</h3>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>FILE</td>
+<td>name of the input BAM or SAM file</td>
+</tr>
+<tr>
+<td><code>-o</code>, <code>--output-bam-file=&lt;outBam&gt;</code></td>
+<td>Output BAM file name/path. Avoid spaces when setting the path/file name.</td>
+</tr>
+<tr>
+<td><code>-c</code>, <code>--consensus-mode=&lt;cMode&gt;</code></td>
+<td>Consensus calling mode: SINGLE, HYBRID, DUPLEX. For more details see below for table of <em>Consensus Modes</em>.</td>
+</tr>
+</tbody>
+</table><h3 id="input-read-filter-parameters">Input read filter parameters:</h3>
+<p>Filtered input reads are always removed from the output file regardless of <code>-r</code> parameter.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Sub-option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-f</code>, <code>--input-read-filtering</code></td>
+<td></td>
+<td>Enable input read filtering. With no additional filtering options specified only unmapped (SAM flag 0x4), secondary (SAM flag 0x100), and supplementary (SAM flag 0x800) reads will be filtered. Other optional filters can be specified using <code>-fi</code>, <code>-mm</code>, <code>-mr</code> and <code>-mq</code>.</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-fi</code>, <code>--interval-filter</code></td>
+<td>Enable this filter to remove reads that are not covered by intervals in the optionally provided bed file. <strong>In the case of input BAM with many chimeric alignments, this filter may cause loss of read pairs before consensus calling.</strong></td>
+</tr>
+<tr>
+<td></td>
+<td><code>-mm &lt;number&gt;</code>, <code>--min-avg-MBC-qual=&lt;minAvgMBCQual&gt;</code></td>
+<td>Sets the minimum average MBC base quality. Filter reads with lower average MBC base quality. <br> Range is [0, 40], default is 0.</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-mr &lt;number&gt;</code>, <code>--min-avg-read-qual=&lt;minAvgReadQual&gt;</code></td>
+<td>Set the minimum average read base quality. Filter reads with lower average read base quality. <br> Range is [0, 40], default is 0.</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-mq &lt;number&gt;</code>, <code>--min-MAPQ=&lt;minMAPQ&gt;</code></td>
+<td>Sets the minimum read mapping quality (MAPQ). Filter reads with lower MAPQ. <br> Range is [0, 255], default is 0.</td>
+</tr>
+</tbody>
+</table><h3 id="consensus-read-filter-parameters">Consensus read filter parameters</h3>
+<p>Filtered consensus reads are flagged with SAM flag 0x200.</p>
+
+<table>
+<thead>
+<tr>
+<th>Parameter</th>
+<th>Sub-option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-F</code>, <code>--consensus-read-filtering</code></td>
+<td></td>
+<td>Enable consensus read filtering. Filtered reads will be flagged with SAM flag 0x200.  <code>-MS</code> and <code>-MD</code> are applied either using default values or with values specified by user with option <code>-MS</code> and <code>-MD</code>.</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-MS &lt;number&gt;</code>, <code>--min-multiplicity-in-single=&lt;minMulti4Single&gt;</code></td>
+<td>Minimum number of read pairs associated with an MBC/single consensus read pair (amplification level). Single consensus read pairs generated from fewer read pairs than the specified threshold will be flagged with SAM flag 0x200. In duplex mode (-c DUPLEX), in which duplex consensus read pairs are formed from two single consensus read pairs, this threshold applies to whichever single consensus read pair has the smaller value.  <br> Range is &gt;= 1, default is 1.</td>
+</tr>
+<tr>
+<td></td>
+<td><code>-MD &lt;number&gt;</code>, <code>--min-multiplicity-in-duplex=&lt;minMulti4Duplex&gt;</code></td>
+<td>Minimum number of read pairs associated with duplex MBC/duplex consensus read pairs (total number of read pairs associated with the two single consensus read pairs that form the duplex consensus read pair). Duplex consensus read pairs generated from fewer read pairs than the specified threshold will be flagged with SAM flag 0x200. <br> Range is &gt;= 2, default is 2.</td>
+</tr>
+</tbody>
+</table><h3 id="additional-options">Additional Options:</h3>
+
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-v</code>, <code>--version</code></td>
+<td>Displays version info</td>
+</tr>
+<tr>
+<td><code>-h</code>, <code>--help</code></td>
+<td>Displays help message</td>
+</tr>
+<tr>
+<td><code>-e</code>, <code>--memory-efficient-mode</code></td>
+<td>Enables memory-efficient mode.  Uses less memory at the cost of computational time.</td>
+</tr>
+<tr>
+<td><code>-r</code>, <code>--remove-dup-mode</code></td>
+<td>Removes duplicates (SAM flag 0x400) and filtered consensus reads (SAM flag 0x200) from the output bam file.</td>
+</tr>
+<tr>
+<td><code>-g</code>, <code>--keep-singleton</code></td>
+<td>Keep singleton reads (that have unmapped mate) in the output bam file.</td>
+</tr>
+<tr>
+<td><code>-d &lt;number&gt;</code>, <code>--MBC-mismatch=&lt;mbcMismatch&gt;</code></td>
+<td>Sets the maximum number of MBC sequence mismatches allowed for the corresponding reads to be considered part of the same MBC family. <br> Range is [0, 2], default is 0.</td>
+</tr>
+<tr>
+<td><code>-b &lt;bed_file&gt;</code>, <code>--bed-file=&lt;bedFile&gt;</code></td>
+<td>Sets optional file used to define the covered regions for metrics calculations. If not provided, all reads will be treated as not in a covered region. Required if option <code>-fi</code> filtering option is applied.</td>
+</tr>
+<tr>
+<td><code>-s &lt;number&gt;</code>,  <code>--cache-size=&lt;cacheSize&gt;</code></td>
+<td>Sets the pairing cache size. The default value should cover most cases but may be increased if the output .stat file reveals an unreasonably large gap between <code># sam records passed input read filtering</code> and <code># correctly-paired read pairs for MBC Consensus calling</code>. <br> Range is 1000-1000000, default is 100000.</td>
+</tr>
+</tbody>
+</table><h3 id="consensus-mode">Consensus Mode:</h3>
+<p>CReaK identifies consensus reads in three different modes: SINGLE, HYBRID, and DUPLEX. All three modes can be applied to SureSelect XT HS2 but only SINGLE can be applied to SureSelect XT HS (since XT HS data does not have a dual MBC).</p>
+
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SINGLE</td>
+<td>One read pair is generated from a group of read pairs that share the same mapped start and end coordinate as well as the same MBC sequence. If <code>-d</code> is not 0, a representative read pair is further chosen from read pairs of different MBC groups (<code>-d</code> allows merging of MBCs with mismatches).</td>
+</tr>
+<tr>
+<td>DUPLEX</td>
+<td>After single consensus calling, a duplex MBC/duplex consensus read pair is generated when two complementary single consensus MBCs/consensus read pairs are present (one from each strand). All single consensus read pairs that do not have its complementary partner are flagged as <em>not passing platform/vendor quality controls</em> (SAM flag 0x200).</td>
+</tr>
+<tr>
+<td>HYBRID</td>
+<td>Follows the same approach as DUPLEX mode, but the single consensus read pairs are not flagged as <em>not passing platform/vendor quality controls</em> (SAM flag 0x200). Also, for compatibility with downstream applications, duplex consensus read pairs are output twice (once for each input single read pairs) in order to match the stoichiometry of the single consensus read pairs.</td>
+</tr>
+</tbody>
+</table><h3 id="usage-examples">Usage examples:</h3>
+<ul>
+<li>SureSelect XT HS (and SureSelect XT HS2 in single consensus mode)</li>
+</ul>
+<pre><code>java -Xmx8G -jar creak-&lt;version&gt;.jar \
+     -c SINGLE -d 0 -f -mm 25 -mr 30 -F -MS 1 \
+     -b Covered.bed -o test_output.bam \
+     test_input.bam
+</code></pre>
+<ul>
+<li>SureSelect XT HS2 in duplex mode</li>
+</ul>
+<pre><code>java -Xmx8G -jar creak-&lt;version&gt;.jar \
+     -c DUPLEX -d 0 -f -mm 25 -mr 30 -F -MS 1 -MD 2 \
+     -b Covered.bed -o test_output.bam \
+     test_input.bam
+</code></pre>
+<ul>
+<li>SureSelect XT HS2 in hybrid mode</li>
+</ul>
+<pre><code>java -Xmx8G -jar creak-&lt;version&gt;.jar \
+     -c HYBRID -d 0 -f -mm 25 -mr 30 -F -MS 1 -MD 2 \
+     -b Covered.bed -o test_output.bam \
+     test_input.bam
+</code></pre>
+<ul>
+<li>SureSelect XT HS2 in hybrid mode (with less memory)</li>
+</ul>
+<pre><code>java -Xmx8G -jar creak-&lt;version&gt;.jar \
+     -e -c HYBRID -d 0 \
+     -f -mm 25 -mr 25 -F -MS 1 -MD 2 \
+     -b Covered.bed -o test_output.bam \
+     test_input.bam
+</code></pre>
+<p><em><strong>Note</strong></em>: <em>memory efficient mode(-e) works for any mode,  “SureSelect XT HS2 in hybrid mode” is just an example.</em></p>
+<ul>
+<li>SureSelect XT HS2 in hybrid mode (with duplicates and filtered reads removed)</li>
+</ul>
+<pre><code>java -Xmx12G -jar creak-&lt;version&gt;.jar \
+     -r -c HYBRID -d 0 \
+     -f -mm 25 -mr 25 -F -MS 1 -MD 2 \
+     -b Covered.bed -o test_output.bam \ 
+     test_input.bam
+</code></pre>
+<p><em><strong>Note</strong></em>:  <em>removal mode (-r) works for any mode,  “SureSelect XT HS2 in hybrid mode” is just an example.</em></p>
+<h3 id="relevant-sam-tags">Relevant SAM Tags:</h3>
+<p>CReaK requires tag values in the SAM record of the input BAM file that contain the molecular barcode sequence and quality:</p>
+
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Type</th>
+<th>Description</th>
+<th>Example</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>RX</code></td>
+<td>String(Z)</td>
+<td>Sequence bases of the unique molecular barcode</td>
+<td><code>RX:Z:CGT-CCG</code></td>
+</tr>
+<tr>
+<td><code>QX</code></td>
+<td>String(Z)</td>
+<td>Quality score of the unique molecular barcode in the RX tag</td>
+<td><code>QX:Z:DDD BDB</code></td>
+</tr>
+</tbody>
+</table><p>CReaK may insert some tags into the output SAM records to provide additional information about the deduplication process:</p>
+
+<table>
+<thead>
+<tr>
+<th>Tag</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>xc</code></td>
+<td>Integer(i)</td>
+<td>Indicates whether this read is covered by intervals in the bed file. A read with mapped bases overlapping with the <code>-b</code> BED file has tag value set to 1, otherwise the value is set to 0. The read pair with two reads mapped to different reference names is always set to 0. <br> e.g. <code>xc:i:0</code> means this read does not intersect with the BED file.</td>
+</tr>
+<tr>
+<td><code>xm</code></td>
+<td>Integer(i)</td>
+<td>Indicates the number of read pairs associated with an MBC/single consensus read pair. <br> e.g. <code>xm:i:5</code> means this MBC has 5 read pairs associated with it (including this single consensus read pair itself).</td>
+</tr>
+<tr>
+<td><code>xd</code></td>
+<td>Integer(i)</td>
+<td>Indicates the number of read pairs associated with a duplex MBC/duplex consensus read pair (or the two single MBCs that form this duplex MBC). This tag is only present for duplex consensus reads. <br>  e.g. <code>xd:i:8</code> means this duplex MBC has 8 read pairs associated with it (including this duplex consensus read pair itself). If the same read has <code>xm:i:5</code>, that means that one of the single MBCs that forms the duplex MBC has 5 read pairs associated with it, and the other single MBC has 8 - 5 = 3 read pairs associated with it.</td>
+</tr>
+<tr>
+<td><code>zd</code></td>
+<td>String(Z)</td>
+<td>Contains the read names of duplicates that are associated with this single/duplex consensus read. The number of read names is capped at 50/100 for single/duplex consensus read. Read names are comma-separated. <br> e.g. <code>zd:Z:D00266:1113:HTWK5BCX2:1:1115:2885:70626</code> means one read pair with the name being D00266…70626 is flagged as a duplicate of this consensus read pair.</td>
+</tr>
+<tr>
+<td><code>zp</code></td>
+<td>String(Z)</td>
+<td>Contains original information from the single consensus read that shares the same name as the duplex consensus read before it was merged. This tag is only for duplex consensus reads. One duplex read is created by merging two single consensus reads.  The read name, sequence, quality, CIGAR and MD are preserved in this tag, separated by a vertical bar <code>|</code>.  <br> e.g.<code>zp:Z:D00266:1113:HTWK5BCX2:1:1211:8833:23978|GACGCTCTTCCGATCTCCGT|0/&lt;GHG??DHFHGCHHIIHH|3S17M|17</code> contains original read name (same as the duplex read), sequence, quality, CIGAR, and MD of a single consensus read before it is merged into this duplex consensus read.</td>
+</tr>
+<tr>
+<td><code>zn</code></td>
+<td>String(Z)</td>
+<td>Contains original information from the single consensus read that does not share the same name as the duplex consensus read before it was merged. This tag is only for duplex consensus reads. One duplex read is created by merging two single consensus reads.  The read name, sequence, quality, CIGAR and MD are preserved in this tag, separated by vertical bar <code>|</code>. <br> e.g.<code>zn:Z:D00266:1113:HTWK5BCX2:1:1214:18553:39660|GACGCTCTTCCGATCTCCGT|0/&lt;GHG??DHFHGCHHIIHH|3S17M|17</code> contains original read name, sequence, quality, CIGAR, and MD of a single consensus read before it is merged into this duplex consensus read.</td>
+</tr>
+</tbody>
+</table><h3 id="statistics-in-.stats-file">Statistics in .stats file:</h3>
+<p>CReaK generates a .stats file along with the output .bam file.  The .stats file contains duplicate and filtering statistics which are categorized into single number statistics and histograms. Please see below for detailed descriptions of all metrics.</p>
+<h4 id="single-number-statistics">Single number statistics</h4>
+
+<table>
+<thead>
+<tr>
+<th>Item name</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code># processed sam records:</code></td>
+<td>the total number of SAM records that CReaK processed</td>
+</tr>
+<tr>
+<td><code># sam records passed input read filtering:</code></td>
+<td>the total number of SAM records that pass the filtering caused by the application of <code>-f</code>, <code>-fi</code>, <code>-mm</code>, <code>-mr</code> and <code>-mq</code>.</td>
+</tr>
+<tr>
+<td><code># correctly-paired read pairs for MBC Consensus calling:</code></td>
+<td>after input read filtering, the total number of SAM records that are properly paired with each other.</td>
+</tr>
+<tr>
+<td><code># read pairs already marked as duplicate and not used for MBC Consensus calling:</code></td>
+<td>among the correctly paired SAM records, the total number of read pairs that are already flagged as duplicate in the input bam file and are thus ignored in consensus read calling.</td>
+</tr>
+<tr>
+<td><code># read pairs that are chimeric (on diff ref names):</code></td>
+<td>among the correctly paired SAM records, the number of read pairs that have reads mapped to different chromosomes/reference names. This does not include chimeric alignments that are mapped very far away from each other on the same chromosome/reference name.</td>
+</tr>
+<tr>
+<td><code># read pairs called as single consensus:</code></td>
+<td>the number of read pairs that are called as single consensus read pairs. In SINGLE consensus mode, reports the total number of all consensus read pairs. In DUPLEX or HYBRID consensus mode, reports the number of single consensus read pairs that cannot be merged into duplex consensus read pairs.</td>
+</tr>
+<tr>
+<td><code># read pairs called as duplex consensus:</code></td>
+<td>the total number of read pairs that are called as duplex consensus read pairs. In SINGLE consensus mode, this number should be 0.</td>
+</tr>
+<tr>
+<td><code># read pairs called as chimeric (on diff ref names) consensus:</code></td>
+<td>the total number of consensus read pairs that are based on chimeric alignments, specifically those that are mapped to different chromosomes/reference names. This metric applies to both single consensus or duplex consensus modes, and is a subset of <code># read pairs get called as single consensus</code> or <code># read pairs get called as duplex consensus</code>.</td>
+</tr>
+<tr>
+<td><code># read pairs marked as dups during consensus calling:</code></td>
+<td>the total number of read pairs that are flagged as duplicate (SAM flag 0x400).</td>
+</tr>
+<tr>
+<td><code># read pairs that failed consensus filter:</code></td>
+<td>the total number of read pairs that are flagged as not passing platform/vendor quality control(SAM flag 0x200) due to the application of the <code>-MS</code> and <code>-MD</code> parameters.</td>
+</tr>
+<tr>
+<td><code># read pairs called as single consensus and failed to form duplex consensus:</code></td>
+<td>the total number of read pairs that are called as single consensus but are unable to form duplex consensus. In SINGLE consensus mode, this number should be 0. In DUPLEX or HYBRID consensus mode, this number should be equal to <code># read pairs get called as single consensus</code>.</td>
+</tr>
+</tbody>
+</table><h4 id="histograms">Histograms</h4>
+<p>The histogram is represented by a series of  numbers on the <em>X axis</em> and  their counterparts on the <em>Y axis</em> .  These numbers are comma-separated.</p>
+
+<table>
+<thead>
+<tr>
+<th>Histogram</th>
+<th>X axis</th>
+<th>Y axis</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>SINGLE CONSENSUS HISTOGRAM (uncovered)</code></td>
+<td>the number of read pairs associated with an MBC family, or the amplification level of a single MBC in the uncovered regions (defined by the user-provided bed file)</td>
+<td>the number of MBCs at this amplification level</td>
+<td>Shows the distribution of MBCs at different amplification levels in the uncovered regions. <br> e.g., x_axis=1,2 and y_axis=4,5 means that, in the uncovered regions, there are 4 MBCs having only 1 read pair associated with them, and 5 MBCs having 2 read pairs associated with them</td>
+</tr>
+<tr>
+<td><code>SINGLE CONSENSUS HISTOGRAM (covered)</code></td>
+<td>same as above but for the covered regions</td>
+<td>same as above</td>
+<td>same as above but for the covered regions</td>
+</tr>
+<tr>
+<td><code>DUPLEX_CONSENSUS HISTOGRAM 1 (uncovered)</code></td>
+<td>the minimum number of read pairs associated with the two MBCs that form the duplex MBC, or the minimum amplification level of this duplex MBC family in the uncovered regions (defined by the user-provided bed file)</td>
+<td>the number of duplex MBCs at this amplification level</td>
+<td>Shows the distribution of duplex MBCs at different minimum amplification levels in the uncovered regions. <br> e.g., x_axis=1,2 and y_axis=4,5 means that, in the uncovered regions, there are 4 duplex MBCs having at least 1 read pair associated with one of its two single MBCs, and 5 duplex MBCs having at least 2 read pairs associated with one of its two single MBCs.</td>
+</tr>
+<tr>
+<td><code>DUPLEX CONSENSUS HISTOGRAM 1 (covered)</code></td>
+<td>same as above but for the covered regions</td>
+<td>same as above</td>
+<td>same as above but for the covered regions</td>
+</tr>
+<tr>
+<td><code>DUPLEX_CONSENSUS HISTOGRAM 2 (uncovered):</code></td>
+<td>the total number of read pairs associated with the two MBCs that form the duplex MBC family, or the maximum amplification level of this duplex MBC in the uncovered regions (defined by the user-provided bed file)</td>
+<td>the number of duplex MBCs at this amplification level</td>
+<td>Shows the distribution of duplex MBCs at different maximum amplification levels in the uncovered regions. <br> e.g., x_axis=3,4 and y_axis=4,5 means that, in the uncovered regions, there are 4 duplex MBCs having at least 3 read pairs in total associated with its two single MBCs, and 5 duplex MBCs having 4 read pairs associated with its two single MBCs.</td>
+</tr>
+<tr>
+<td><code>DUPLEX CONSENSUS HISTOGRAM 2 (covered)</code></td>
+<td>same as above but for the covered regions</td>
+<td>same as above</td>
+<td>same as above but for the covered regions</td>
+</tr>
+</tbody>
+</table><p><em><strong>Note:</strong></em> <em>The histograms are based on read pairs instead of reads, and in cases where a read pair has one read in a covered region and the other read in an uncovered region, the first read of this pair (by SAM flag 0x40) decides where it belongs.</em></p>
+</div>
+</body>
+
+</html>
