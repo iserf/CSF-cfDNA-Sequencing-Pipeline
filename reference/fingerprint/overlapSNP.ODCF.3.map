@@ -1,0 +1,109 @@
+@HD	VN:1.5	SO:unsorted
+@SQ	SN:chr1	LN:248956422	M5:6aef897c3d6ff0c78aff06ac189178dd	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr2	LN:242193529	M5:f98db672eb0993dcfdabafe2a882905c	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr3	LN:198295559	M5:76635a41ea913a405ded820447d067b0	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr4	LN:190214555	M5:3210fecf1eb92d5489da4346b3fddc6e	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr5	LN:181538259	M5:a811b3dc9fe66af729dc0dddf7fa4f13	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr6	LN:170805979	M5:5691468a67c7e7a7b5f2a3a683792c29	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr7	LN:159345973	M5:cc044cc2256a1141212660fb07b6171e	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr8	LN:145138636	M5:c67955b5f7815a9a1edfaa15893d3616	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr9	LN:138394717	M5:6c198acf68b5af7b9d676dfdd531b5de	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr10	LN:133797422	M5:c0eeee7acfdaf31b770a509bdaa6e51a	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr11	LN:135086622	M5:1511375dc2dd1b633af8cf439ae90cec	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr12	LN:133275309	M5:96e414eace405d8c27a6d35ba19df56f	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr13	LN:114364328	M5:a5437debe2ef9c9ef8f3ea2874ae1d82	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr14	LN:107043718	M5:e0f0eecc3bcab6178c62b6211565c807	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr15	LN:101991189	M5:f036bd11158407596ca6bf3581454706	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr16	LN:90338345	M5:db2d37c8b7d019caaf2dd64ba3a6f33a	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr17	LN:83257441	M5:f9a0fb01553adb183568e3eb9d8626db	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr18	LN:80373285	M5:11eeaa801f6b0e2e36a1138616b8ee9a	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr19	LN:58617616	M5:85f9f4fc152c58cb7913c06d6b98573a	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr20	LN:64444167	M5:b18e6c531b0bd70e949a7fc20859cb01	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr21	LN:46709983	M5:974dc7aec0b755b19f031418fdedf293	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chr22	LN:50818468	M5:ac37ec46683600f808cdd41eac1d55cd	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+@SQ	SN:chrX	LN:156040895	M5:2b3a55ff7f58eb308420c8a9b11cac50	AS:38	UR:/seq/references/Homo_sapiens_assembly38/v0/Homo_sapiens_assembly38.fasta	SP:Homo sapiens
+#CHROMOSOME POSITION    NAME    MAJOR_ALLELE    MINOR_ALLELE    MAF ANCHOR_SNP  PANELS
+chr1	4071665	rs3936238	C	T	0.3			
+chr1	11130588	rs2275527	C	T	0.3			
+chr1	11145000	rs1057079	A	G	0.3			
+chr1	11241656	rs1135172	C	T	0.3			
+chr1	11429620	rs877309	A	G	0.3			
+chr1	21325683	rs213028	C	T	0.3			
+chr1	24951490	rs11249206	C	T	0.3			
+chr1	81707362	rs654498	C	T	0.3			
+chr1	109757818	rs3818562	C	T	0.3			
+chr1	177462031	rs715359	A	G	0.3			
+chr1	181362696	rs2804694	C	T	0.3			
+chr1	204455899	rs3765156	A	G	0.3			
+chr1	245926508	rs6426327	A	G	0.3			
+chr10	14649889	rs10796216	A	G	0.3			
+chr10	96879339	rs10882854	C	T	0.3			
+chr11	534241	rs12628	C	T	0.3			
+chr11	38767064	rs11034952	C	T	0.3			
+chr11	64805129	rs2071313	C	T	0.3			
+chr11	69648141	rs9344	A	G	0.3			
+chr11	105428996	rs1945975	C	T	0.3			
+chr12	15863173	rs10846239	C	T	0.3			
+chr12	42804919	rs2468330	C	T	0.3			
+chr12	49032194	rs3741622	C	T	0.3			
+chr12	63104355	rs1495031	C	T	0.3			
+chr12	109670257	rs10774834	C	T	0.3			
+chr12	132643244	rs5744944	A	G	0.3			
+chr15	45707624	rs951295	A	G	0.3			
+chr15	76121187	rs2959823	C	T	0.3			
+chr16	56066611	rs1510189	A	G	0.3			
+chr16	70269676	rs2070203	C	T	0.3			
+chr17	73201608	rs1037256	A	G	0.3			
+chr18	37582874	rs1941955	C	T	0.3			
+chr19	3119240	rs4900	C	T	0.3			
+chr19	10994931	rs7935	C	T	0.3			
+chr19	42294896	rs1052023	C	T	0.3			
+chr2	12008093	rs966367	C	T	0.3			
+chr2	48857533	rs4331560	A	G	0.3			
+chr2	60598305	rs1510480	A	G	0.3			
+chr2	69033224	rs6546473	A	G	0.3			
+chr2	159114850	rs264581	C	T	0.3			
+chr20	1989287	rs2235751	A	G	0.3			
+chr20	58903751	rs7121	C	T	0.3			
+chr21	32625973	rs845016	C	T	0.3			
+chr21	37105029	rs2032088	A	G	0.3			
+chr22	20983035	rs13054014	A	G	0.3			
+chr22	25535404	rs1467387	C	T	0.3			
+chr22	25748792	rs133860	C	T	0.3			
+chr22	26960615	rs739259	A	G	0.3			
+chr22	29659684	rs2857639	A	G	0.3			
+chr22	47819062	rs2208123	A	G	0.3			
+chr3	14617358	rs939290	C	T	0.3			
+chr3	86613004	rs9839873	C	T	0.3			
+chr3	99254081	rs1520670	C	T	0.3			
+chr3	161184742	rs10936224	A	G	0.3			
+chr4	14355505	rs10033147	A	G	0.3			
+chr4	127686676	rs2125573	A	G	0.3			
+chr4	130122894	rs7660805	A	G	0.3			
+chr4	137116127	rs10155413	C	T	0.3			
+chr5	35000206	rs9292570	C	T	0.3			
+chr5	113489979	rs348937	A	G	0.3			
+chr5	147268795	rs1019916	A	G	0.3			
+chr6	33320493	rs1059231	C	T	0.3			
+chr6	47163082	rs7746156	C	T	0.3			
+chr6	67522148	rs9363764	A	G	0.3			
+chr6	148721663	rs10457834	C	T	0.3			
+chr8	36689794	rs6982811	C	T	0.3			
+chr8	50813093	rs1484127	A	G	0.3			
+chr8	95458071	rs6471533	A	G	0.3			
+chr8	95836515	rs472920	C	T	0.3			
+chr8	120770161	rs6991394	C	T	0.3			
+chr8	125669751	rs2385226	C	T	0.3			
+chr9	7711757	rs4742386	A	G	0.3			
+chr9	82800621	rs1040870	C	T	0.3			
+chr9	118597413	rs1414097	C	T	0.3			
+chr9	136503254	rs10521	A	G	0.3			
+chr9	136513479	rs2229971	C	T	0.3			
+chrX	9508949	rs2521373	C	T	0.3			
+chrX	15867307	rs798149	A	G	0.3			
+chrX	28229213	rs5926356	A	G	0.3			
+chrX	69846980	rs5936512	A	G	0.3			
+chrX	115476350	rs5987737	C	T	0.3			
+chrX	137995697	rs5931272	A	G	0.3			
+chrX	146137646	rs1416770	C	T	0.3			
+chrX	148122852	rs6626309	C	T	0.3			

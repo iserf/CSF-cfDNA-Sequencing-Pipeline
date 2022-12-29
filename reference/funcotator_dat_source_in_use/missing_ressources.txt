@@ -1,0 +1,12 @@
+achilles
+cancer_gene_census
+clinvar
+cosmic
+cosmic_fusion
+dbsnp
+gencode
+gencode_xhgnc
+gencode_xrefseq
+oreganno
+funcotator_funcotator_dataSources.v1.7.20200521s_gnomAD_exome.tar.gz
+funcotator_funcotator_dataSources.v1.7.20200521s_gnomAD_genome.tar.gz
